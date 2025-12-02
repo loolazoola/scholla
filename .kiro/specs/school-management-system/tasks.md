@@ -49,17 +49,17 @@
   - Implement password complexity validation
   - _Requirements: 10.1, 10.2, 10.3, 10.5_
 
-- [ ]\* 2.2 Write property test for authentication
+- [x]\* 2.2 Write property test for authentication
 
   - **Property 33: Valid credentials succeed, invalid fail**
   - **Validates: Requirements 10.1**
 
-- [ ]\* 2.3 Write property test for password complexity
+- [x]\* 2.3 Write property test for password complexity
 
   - **Property 37: Password complexity is enforced**
   - **Validates: Requirements 10.5**
 
-- [ ] 2.4 Create login page and form component
+- [x] 2.4 Create login page and form component
 
   - Build LoginForm component with email/password fields
   - Implement client-side validation with Zod
@@ -67,7 +67,7 @@
   - Implement redirect logic based on user role
   - _Requirements: 10.1, 10.3_
 
-- [ ] 2.5 Implement user management service layer
+- [x] 2.5 Implement user management service layer
 
   - Create user CRUD operations (create, read, update, deactivate)
   - Implement email uniqueness validation

@@ -1,21 +1,7 @@
 import { auth } from "@/lib/auth";
-import createIntlMiddleware from "next-intl/middleware";
 import { NextResponse } from "next/server";
-import { locales, defaultLocale } from "./i18n";
-
-// Create the intl middleware
-const intlMiddleware = createIntlMiddleware({
-  locales,
-  defaultLocale,
-  localePrefix: "as-needed",
-});
 
 export default auth((req) => {
-  // First, handle internationalization
-  const intlResponse = intlMiddleware(req);
-  if (intlResponse) {
-    return intlResponse;
-  }
   const { pathname } = req.nextUrl;
   const isLoggedIn = !!req.auth;
   const userRole = req.auth?.user?.role;
