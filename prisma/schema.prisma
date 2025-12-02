@@ -1,0 +1,295 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enums
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  WITHDRAWN
+}
+
+enum AssignmentType {
+  EXAM
+  HOMEWORK
+  PROJECT
+  PARTICIPATION
+}
+
+enum GradingPolicyType {
+  LETTER
+  NUMERIC
+  PERCENTAGE
+}
+
+enum TargetAudience {
+  ALL
+  ADMINS
+  TEACHERS
+  STUDENTS
+  CLASS
+}
+
+// Models
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      Role
+  active    Boolean  @default(true)
+  locale    String   @default("en")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  classesTeaching   Class[]            @relation("TeacherClasses")
+  enrollments       Enrollment[]
+  notifications     Notification[]
+  announcements     Announcement[]
+  examSubmissions   ExamSubmission[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model GradingPolicy {
+  id        String             @id @default(cuid())
+  name      String
+  type      GradingPolicyType
+  scale     Json               // Array of GradeScale objects
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  // Relations
+  classes   Class[]
+}
+
+model Class {
+  id              String         @id @default(cuid())
+  code            String         @unique
+  name            String
+  subject         String
+  teacherId       String
+  capacity        Int?
+  gradingPolicyId String
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Relations
+  teacher         User           @relation("TeacherClasses", fields: [teacherId], references: [id])
+  gradingPolicy   GradingPolicy  @relation(fields: [gradingPolicyId], references: [id])
+  enrollments     Enrollment[]
+  assignments     Assignment[]
+  exams           Exam[]
+  announcements   Announcement[]
+  grades          Grade[]
+  finalGrades     FinalGrade[]
+
+  @@index([code])
+  @@index([teacherId])
+  @@index([gradingPolicyId])
+}
+
+model Enrollment {
+  id         String           @id @default(cuid())
+  studentId  String
+  classId    String
+  enrolledAt DateTime         @default(now())
+  status     EnrollmentStatus @default(ACTIVE)
+
+  // Relations
+  student    User             @relation(fields: [studentId], references: [id])
+  class      Class            @relation(fields: [classId], references: [id], onDelete: Cascade)
+  grades     Grade[]
+  finalGrade FinalGrade?
+
+  @@unique([studentId, classId])
+  @@index([studentId])
+  @@index([classId])
+  @@index([status])
+}
+
+model Assignment {
+  id        String         @id @default(cuid())
+  title     String
+  classId   String
+  type      AssignmentType
+  maxPoints Int
+  weight    Int            // percentage weight in final grade (0-100)
+  dueDate   DateTime?
+  examId    String?        @unique
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  // Relations
+  class     Class          @relation(fields: [classId], references: [id])
+  exam      Exam?          @relation(fields: [examId], references: [id])
+  grades    Grade[]
+
+  @@index([classId])
+}
+
+model Grade {
+  id           String     @id @default(cuid())
+  enrollmentId String
+  assignmentId String
+  classId      String
+  numericValue Int
+  letterValue  String?
+  feedback     String?
+  recordedAt   DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  // Relations
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  class        Class      @relation(fields: [classId], references: [id])
+
+  @@unique([enrollmentId, assignmentId])
+  @@index([enrollmentId])
+  @@index([assignmentId])
+  @@index([classId])
+}
+
+model FinalGrade {
+  id           String     @id @default(cuid())
+  enrollmentId String     @unique
+  classId      String
+  numericValue Int
+  letterValue  String
+  gpaValue     Float
+  calculatedAt DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  // Relations
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
+  class        Class      @relation(fields: [classId], references: [id])
+
+  @@index([classId])
+}
+
+model Announcement {
+  id              String         @id @default(cuid())
+  title           String
+  content         String
+  authorId        String
+  targetAudience  TargetAudience
+  targetClassId   String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Relations
+  author          User           @relation(fields: [authorId], references: [id])
+  targetClass     Class?         @relation(fields: [targetClassId], references: [id])
+  notifications   Notification[]
+
+  @@index([authorId])
+  @@index([targetClassId])
+  @@index([createdAt])
+}
+
+model Notification {
+  id             String       @id @default(cuid())
+  userId         String
+  announcementId String
+  read           Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+
+  // Relations
+  user           User         @relation(fields: [userId], references: [id])
+  announcement   Announcement @relation(fields: [announcementId], references: [id])
+
+  @@index([userId])
+  @@index([announcementId])
+  @@index([read])
+  @@index([createdAt])
+}
+
+model Exam {
+  id          String           @id @default(cuid())
+  title       String
+  classId     String
+  totalPoints Int
+  dueDate     DateTime
+  published   Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  // Relations
+  class       Class            @relation(fields: [classId], references: [id])
+  assignment  Assignment?
+  questions   Question[]
+  submissions ExamSubmission[]
+
+  @@index([classId])
+  @@index([published])
+}
+
+model Question {
+  id        String             @id @default(cuid())
+  examId    String
+  text      String
+  points    Int
+  order     Int
+  createdAt DateTime           @default(now())
+
+  // Relations
+  exam      Exam               @relation(fields: [examId], references: [id], onDelete: Cascade)
+  responses QuestionResponse[]
+
+  @@index([examId])
+  @@index([order])
+}
+
+model ExamSubmission {
+  id          String             @id @default(cuid())
+  examId      String
+  studentId   String
+  submittedAt DateTime           @default(now())
+  late        Boolean            @default(false)
+  totalScore  Int?
+  graded      Boolean            @default(false)
+
+  // Relations
+  exam        Exam               @relation(fields: [examId], references: [id])
+  student     User               @relation(fields: [studentId], references: [id])
+  responses   QuestionResponse[]
+
+  @@unique([examId, studentId])
+  @@index([examId])
+  @@index([studentId])
+  @@index([graded])
+}
+
+model QuestionResponse {
+  id           String         @id @default(cuid())
+  submissionId String
+  questionId   String
+  response     String
+  score        Int?
+  feedback     String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  // Relations
+  submission   ExamSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  question     Question       @relation(fields: [questionId], references: [id])
+
+  @@unique([submissionId, questionId])
+  @@index([submissionId])
+  @@index([questionId])
+}
