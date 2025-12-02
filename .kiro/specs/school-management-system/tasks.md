@@ -40,8 +40,8 @@
   - Set up locale detection and routing
   - _Requirements: 16.1, 16.2, 16.3_
 
-- [ ] 2. Implement authentication and user management
-- [ ] 2.1 Create authentication service layer
+- [x] 2. Implement authentication and user management
+- [x] 2.1 Create authentication service layer
 
   - Implement password hashing with bcrypt
   - Create login function with credential validation
@@ -74,19 +74,19 @@
   - Add user listing with role filtering
   - _Requirements: 1.1, 1.2, 1.3, 1.4, 1.5_
 
-- [ ]\* 2.6 Write property tests for user management
+- [x]\* 2.6 Write property tests for user management
 
   - **Property 1: User creation assigns correct role**
   - **Property 2: User updates persist correctly**
   - **Property 4: Email uniqueness is enforced**
   - **Validates: Requirements 1.1, 1.2, 1.5**
 
-- [ ]\* 2.7 Write property test for deactivated users
+- [x]\* 2.7 Write property test for deactivated users
 
   - **Property 3: Deactivated users cannot authenticate**
   - **Validates: Requirements 1.3**
 
-- [ ] 2.8 Create user management UI components (Admin)
+- [x] 2.8 Create user management UI components (Admin)
 
   - Build UserList component with table and filters
   - Create UserForm component for create/edit
