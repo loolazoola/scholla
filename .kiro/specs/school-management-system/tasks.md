@@ -94,22 +94,22 @@
   - Implement Server Actions for user operations
   - _Requirements: 1.1, 1.2, 1.3, 1.4_
 
-- [ ] 3. Implement role-based access control and layouts
-- [ ] 3.1 Create authorization middleware and utilities
+- [x] 3. Implement role-based access control and layouts
+- [x] 3.1 Create authorization middleware and utilities
 
   - Implement role checking functions
   - Create route protection middleware
   - Add resource ownership verification helpers
   - _Requirements: 11.1, 11.2, 11.3, 11.4, 11.5_
 
-- [ ]\* 3.2 Write property tests for authorization
+- [x]\* 3.2 Write property tests for authorization
 
   - **Property 38: Role-based access control**
   - **Property 39: Role hierarchy is enforced**
   - **Property 40: Admins have full access**
   - **Validates: Requirements 11.1, 11.2, 11.3, 11.4**
 
-- [ ] 3.3 Create role-specific layout components
+- [x] 3.3 Create role-specific layout components
 
   - Build AdminLayout with navigation for users, classes, reports
   - Build TeacherLayout with navigation for classes, gradebook, exams
@@ -117,35 +117,35 @@
   - Add role-based route guards
   - _Requirements: 11.1, 11.2, 11.3, 11.4_
 
-- [ ] 3.4 Create dashboard pages for each role
+- [x] 3.4 Create dashboard pages for each role
 
   - Admin dashboard with system overview
   - Teacher dashboard with class list
   - Student dashboard with enrolled classes
   - _Requirements: 4.1, 6.1_
 
-- [ ] 4. Implement grading policy management
-- [ ] 4.1 Create grading policy service layer
+- [x] 4. Implement grading policy managemen
+- [x] 4.1 Create grading policy service layer
 
   - Implement CRUD operations for grading policies
   - Create grade calculation function (numeric to letter)
   - Add GPA calculation logic
   - _Requirements: 5a.1, 5a.2, 5a.3, 5a.4_
 
-- [ ]\* 4.2 Write property test for grading policy
+- [x]\* 4.2 Write property test for grading policy
 
   - **Property 17a: Grading policy consistency**
   - **Validates: Requirements 5a.3**
 
-- [ ] 4.3 Create grading policy UI components (Admin)
+- [x] 4.3 Create grading policy UI components (Admin)
 
   - Build GradingPolicyList component
   - Create GradingPolicyForm with scale editor
   - Add policy assignment to classes
   - _Requirements: 5a.1, 5a.2, 5a.3_
 
-- [ ] 5. Implement class management
-- [ ] 5.1 Create class service layer
+- [x] 5. Implement class management
+- [x] 5.1 Create class service layer
 
   - Implement class CRUD operations
   - Add class code uniqueness validation
@@ -153,19 +153,19 @@
   - Implement class deletion with enrollment cleanup
   - _Requirements: 2.1, 2.2, 2.4, 2.5_
 
-- [ ]\* 5.2 Write property tests for class management
+- [x]\* 5.2 Write property tests for class management
 
   - **Property 5: Class creation requires all mandatory fields**
   - **Property 6: Only active teachers can be assigned to classes**
   - **Property 9: Class code uniqueness**
   - **Validates: Requirements 2.1, 2.2, 2.5**
 
-- [ ]\* 5.3 Write property test for class deletion
+- [x]\* 5.3 Write property test for class deletion
 
   - **Property 8: Class deletion removes enrollments but preserves grades**
   - **Validates: Requirements 2.4**
 
-- [ ] 5.4 Create class management UI components (Admin)
+- [x] 5.4 Create class management UI components (Admin)
 
   - Build ClassList component with filters
   - Create ClassForm component with teacher dropdown
@@ -173,7 +173,7 @@
   - Implement delete confirmation with warning
   - _Requirements: 2.1, 2.2, 2.4, 2.5_
 
-- [ ] 5.5 Create class roster component (Teacher)
+- [x] 5.5 Create class roster component (Teacher)
 
   - Build ClassRoster component showing enrolled students
   - Display student name, enrollment date, current grade
@@ -187,7 +187,7 @@
   - **Validates: Requirements 4.1, 4.2, 4.3**
 
 - [ ] 6. Implement student enrollment
-- [ ] 6.1 Create enrollment service layer
+- [x] 6.1 Create enrollment service layer
 
   - Implement enrollment creation with validation
   - Add duplicate enrollment prevention
